@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block body %}
+{% block main %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Congratulations!</title>
+</head>
+<body>
+    <h1 style="color:black">Congratulations, you won!</h1>
+    <h1 style="color:white">You guessed the number in {{X}} attempts.</h1>
+    <div style="text-align: center;">
+        <a href="/handle_game_selection" style="color: black; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); margin-bottom: 20px;">Start a New Game</a>
+
+    <a href="/" style="color: white; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); margin-bottom: 20px;">Return to Main Menu</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        function launchFireworks() {
+            // Launch confetti multiple times to simulate fireworks
+            let duration = 5 * 1000;
+            let end = Date.now() + duration;
+
+            (function frame() {
+                // Random fireworks colors
+                confetti({
+                    particleCount: 50,
+                    angle: 30,
+                    spread: 33,
+                    origin: { x: 0 }
+
+                });
+                confetti({
+                    particleCount: 50,
+                    angle: 160,
+                    spread: 33,
+                    origin: { x: 1 }
+
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        // Trigger fireworks when the page loads
+        window.onload = function() {
+            launchFireworks();
+        };
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+{% endblock %}
+{% endblock %}

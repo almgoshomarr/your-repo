@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block body %}
+{% block main %}
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        .btn1 {
+            width: 15%;
+        }
+
+        </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    
+
+</head>
+<body>
+    <form action="/password_change" method="POST">
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
+        </div>
+        <div class="mb-3">
+            <input class="form-control mx-auto w-auto" name="old_passowrd" placeholder="old_passowrd" type="password">
+        </div>
+        <div>
+            <input class="form-control mx-auto w-auto" name="new_passowrd" placeholder="nwe_passowrd" type="password">
+        </div>
+        <div>
+            <input class="form-control mx-auto w-auto" name="password_confirm" placeholder="Password confirm" type="password">
+        </div>
+        <button class="btn1" type="submit">change_password</button>
+    </form>
+</body>
+</html>
+{% endblock %}
+{% endblock %}

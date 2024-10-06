@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block body %}
+{% block main %}
+
+<div class="section">
+
+    <h2>All stock</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>user_name</th>
+                <th>type</th>
+                <th>stock_symbole</th>
+                <th>number</th>
+                <th>price</th>
+                <th>month</th>
+                <th>day</th>
+                <th>houre</th>
+
+
+
+            </tr>
+        </thead>
+        <tbody>
+            <!-- TODO: Loop through the database entries to display them in this table -->
+
+            {% for symbol in symbols %}
+                <tr>
+                    <td> {{ symbol.user_name }} </td>
+                <td> {{ symbol.type }} </td>
+                <td> {{ symbol.stock_symbole }} </td>
+                <td> {{ symbol.number }} </td>
+                <td> {{ symbol.price }} </td>
+                <td> {{ symbol.month }} </td>
+                <td> {{ symbol.day }} </td>
+                <td> {{ symbol.houre }} </td>
+
+                </tr>
+            {% endfor %}
+
+
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}
+{% endblock %}

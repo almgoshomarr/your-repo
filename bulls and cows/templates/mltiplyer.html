@@ -1,0 +1,176 @@
+{% extends "layout1.html" %}
+{% block body %}
+{% block main %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>    
+<!-- Main content -->
+
+
+            <!-- Display current attempt and results -->
+            
+        
+                
+
+<div class="game-container">
+    <h1 id="home">Bulls and Cows Multiplayer Game</h1>
+    <p>Player 1 vs Player 2: Guess the 4-digit number.</p>
+
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+                {% endwith %}
+
+    
+    
+        
+        <form action="{{ url_for('game_room', game_id=game_id) }}" method="POST">
+        <!-- Form for guessing -->
+        <p>Game ID: {{ game_id }}</p>
+        <!-- <p>Game ID: {{ game_id }}</p>-->
+        <input name="input" type="text" id="guessInput" placeholder="Enter your guess must be 4 digit">
+        <button type="submit" id="submitGuess">Guess</button>
+        <button type="submit" name="reveal" value="reveal_digit">Reveal a Digit</button>
+        <button type="submit" name="remove" value="remove_wrong_number">Remove Wrong Number</button>
+
+        </form>      
+   
+       
+            <!-- Display current attempt and results -->
+              
+            <div class="attempts-container" style="overflow-y: auto; max-height: 200px;">
+                <div class="player-attempts">
+                    <div id="currentTurn1">
+                    Player Turn: {{ name }}
+                    </div>
+                    <h3>Player 1's Previous Attempts:</h3>
+                    <ul id="player1AttemptsList">
+                        {% for attempt in attimpts_data1 %}
+                        <li>Attempt {{ loop.index }}: Guess: {{ attempt.gusse }}, Bulls: {{ attempt.bulls }}, Cows: {{ attempt.cows }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            
+                <div class="player-attempts">
+                    <div id="currentTurn2">
+                    Player Turn: {{ name }}
+                    </div>
+                    <h3>Player 2's Previous Attempts:</h3>
+                    <ul id="player2AttemptsList">
+                        {% for attempt in attimpts_data2 %}
+                        <li>Attempt {{ loop.index }}: Guess: {{ attempt.gusse }}, Bulls: {{ attempt.bulls }}, Cows: {{ attempt.cows }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            
+
+
+        <div class="images" id="imagesContainer">
+
+            <!-- Images will be dynamically inserted here -->
+            {% if bulls is defined %}
+            {% for i in range(bulls) %}
+            <img src="{{ url_for('static', filename='Bull.png') }}" alt="Bull">
+            {% endfor %}
+            {% for i in range(cows) %}
+            <img src="{{ url_for('static', filename='Cow.png') }}" alt="Cow">
+            {% endfor %}
+            {% else %}
+
+            {% endif %}
+        </div>
+    </div>
+</div>
+</form>
+
+<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+
+<script>
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    
+    let game_id = "{{ game_id }}";  // Get the game_id from your Flask template
+    let currentRoom = 'game_' + game_id;
+    
+    // Join the game room on page load
+    socket.on('connect', function() {
+        console.log('Connected to server');
+        joinRoom(currentRoom);  // Automatically join the room
+    });
+    
+    // Function to join a room
+    function joinRoom(room) {
+        socket.emit('join', {room: room});
+        console.log('Joined room: ' + room);
+    }
+    
+    // Function to leave a room
+    function leaveRoom(room) {
+        socket.emit('leave', {room: room});
+        console.log('Left room: ' + room);
+    }
+    
+    // Function to send a move (guess) to the server
+    function sendMove(move) {
+        socket.emit('move', {guess: move, room: currentRoom}); // Send structured data with room
+        console.log('Move sent: ' + move);
+    }
+    
+    socket.on('move', function(data) {
+        console.log('Move received:', data);
+    
+        // Update Player 1's Attempts List
+        const player1List = document.getElementById('player1AttemptsList');
+        player1List.innerHTML = ''; // Clear the list first
+        data.attimpts_data1.forEach((attempt, index) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `Attempt ${index + 1}: Guess: ${attempt.gusse}, Bulls: ${attempt.bulls}, Cows: ${attempt.cows}`;
+            player1List.appendChild(listItem);
+        });
+    
+        // Update Player 2's Attempts List
+        const player2List = document.getElementById('player2AttemptsList');
+        player2List.innerHTML = ''; // Clear the list first
+        data.attimpts_data2.forEach((attempt, index) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `Attempt ${index + 1}: Guess: ${attempt.gusse}, Bulls: ${attempt.bulls}, Cows: ${attempt.cows}`;
+            player2List.appendChild(listItem);
+        });
+    
+        // Update the current player's turn on both sides
+        document.getElementById('currentTurn1').textContent = `Player Turn: ${data.name}`;
+        document.getElementById('currentTurn2').textContent = `Player Turn: ${data.name}`;
+    
+        // Optionally, update the bulls and cows for the current attempt
+        document.getElementById('currentAttempt').textContent = `Attempt ${data.current_attimpt} - Bulls: ${data.bulls}, Cows: ${data.cows}`;
+    });
+    
+
+   // Listen for game result messages
+socket.on('game_result', function(data) {
+    if (data.result === 'win') {
+        // Display message to the losing player
+        alert(`You lose! Player ${data.winner} has won the game.`);
+        
+        
+    }
+});
+    
+    </script>
+    
+
+
+
+
+
+
+{% endblock %}
+{% endblock %}

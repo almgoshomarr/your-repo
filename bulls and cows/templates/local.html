@@ -1,0 +1,51 @@
+{% extends "layout1.html" %}
+{% block body %}
+{% block main %}
+
+<!-- Main content -->
+<div class="content">
+    <form action="/local_N_Digit_game" method="POST">
+    <div class="game-container">
+        <h1 id="home">Bulls and Cows Game</h1>
+        <p>Guess the N-digit number.</p>
+        <input type="text" id="digit_number" name=digit maxlength="1" placeholder="Enter the number of digit you want to generate (max is 6) ">
+        <input name=input type="text" id="guessInput"  placeholder="Enter your guess">
+        <button type="submit">Guess</button>
+
+        <div id="currentAttempt">
+            Attempt {{ current_attempt }}: {{ bulls}} Bulls, {{ cows }} Cows
+        </div>
+
+        <div id="result"></div>
+        <div class="attempts" style="overflow-y: auto; max-height: 200px;">
+            <h3>Previous Attempts:</h3>
+            <ul id="attemptsList">
+                {% for attempt in attempts %}
+                  <li>Attempt {{ loop.index }}: Guess: {{ attempt.guess }}, Bulls: {{ attempt.bulls }}, Cows: {{ attempt.cows }}</li>
+                  <input type="hidden" name="current_attempt_N" value="{{loop.index}}">
+                  {% endfor %}
+        </div>
+
+        <div class="images" id="imagesContainer">
+
+            <!-- Images will be dynamically inserted here -->
+            {% if bulls is defined %}
+            {% for i in range(bulls) %}
+            <img src="{{ url_for('static', filename='Bull.png') }}" alt="Bull">
+            {% endfor %}
+            {% for i in range(cows) %}
+            <img src="{{ url_for('static', filename='Cow.png') }}" alt="Cow">
+            {% endfor %}
+            {% else %}
+
+            {% endif %}
+        </div>
+    </div>
+</div>
+</form>
+
+
+
+
+{% endblock %}
+{% endblock %}

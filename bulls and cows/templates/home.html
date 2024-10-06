@@ -1,0 +1,33 @@
+{% extends "layout1.html" %}
+{% block body %}
+{% block main %}
+
+<!-- Main content -->
+<div class="content">
+    <form action="/home" method="POST">
+    <div class="game-container">
+        <h1 id="home">Bulls and Cows Game</h1>
+
+        <button name="local_game" type="submit">local_game </button>
+        <button name="local_N_Digit_game" type="submit">local_N_Digit_game </button>
+        <button name="handle_game_selection" type="submit">Mltiplyer_game</button>
+
+</div>
+</form>
+
+<div style="background-color: #ffffffcc;
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;"> <!-- Centers the div itself if needed -->
+    
+    <img src="{{ url_for('static', filename='bulls_and_cows1.png') }}" 
+         alt="Bull" 
+         style="display: block; margin: 0 auto;"> <!-- Centers the image -->
+</div>
+
+
+
+
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulls and Cows Game</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #f7cac9, #92a8d1);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Modal styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 400px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+        /* Navigation bar styles */
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* Add some padding on top to avoid content overlap with navbar */
+        .content {
+            padding-top: 60px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+            margin-bottom: 20px;
+        }
+
+        .game-container {
+            background-color: #ffffffcc;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .images {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .images img {
+            width: 100px;
+            margin: 10px;
+            border: 3px solid #fff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .images img:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            background-color: #92a8d1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #f7cac9;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: calc(100% - 22px);
+            box-sizing: border-box;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .attempts {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .attempts h3 {
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        .attempts ul {
+            list-style-type: none;
+            padding: 0;
+            color: #333;
+        }
+
+        .attempts ul li {
+            background-color: #f0f0f0;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .form-container {
+            background-color: #ffffffcc;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .form-control {
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<!-- Navigation bar -->
+<div class="navbar">
+    {% if session["user_id"] %}
+    <a href="/home">home</a>
+    <a href="/local_game">local_Game</a>
+    <a href="/local_N_Digit_game">local_N_Digit_game</a>
+    <a href="/handle_game_selection">Mltiplyer</a>
+    <a href="/statistics">statistics</a>
+    <a href="/password_change">password_change</a>
+    <a href="/logout">logout</a>
+    {% else %}
+    <a href="/login">login</a>
+    <a href="/register">register</a>
+    {% endif %}
+</div>
+
+
+
+<div class="content">
+    <div class="game-container">
+        <h1 id="home" style="color:black" >Bulls and Cows Game</h1>
+    </div>
+</div>
+
+{% if get_flashed_messages() %}
+            <header>
+                <div class="alert alert-primary mb-0 text-center" role="alert">
+                    {{ get_flashed_messages() | join(" ") }}
+                </div>
+            </header>
+        {% endif %}
+
+        <main class="container py-5 text-center">
+            {% block main %}{% endblock %}
+        </main>
+
+        <footer class="mb-5">
+
+
+<script>
+
+</script>
+
+</body>
+</html>

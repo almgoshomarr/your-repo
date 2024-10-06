@@ -1,0 +1,21 @@
+{% extends "layout1.html" %}
+{% block body %}
+{% block main %}
+
+<!-- Main content -->
+<div class="content">
+    <div class="game-container">
+        <h1 id="home">Bulls and Cows Multiplayer Game</h1>
+        <p>Player 1 vs Player 2: Guess the 4-digit number.</p>
+
+        <!-- Form for creating or joining a game -->
+        <form action="{{ url_for('handle_game_selection') }}" method="POST">
+            <label for="game_id">Enter Game ID:</label>
+            <input type="text" id="game_id" name="game_id" required>
+            <input type="text" id="user_number" name="user_number" placeholder="Enter your number for the other player to guess" required>
+            <button type="submit">Create or Join Game</button>
+        </form>    
+    </div>
+</div>
+{% endblock %}
+{% endblock %}
